@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
 
 from django import forms
+from django.contrib import admin
 from django.contrib.flatpages.admin import FlatPageAdmin
 from django.contrib.flatpages.admin import FlatpageForm
 from django.contrib.flatpages.models import FlatPage
 from django.utils.translation import ugettext_lazy as _
 from django.forms.models import model_to_dict
 
+from ckeditor.widgets import CKEditorWidget
+
 from .models import CMSFlatPage
 
 
 class CustomFlatpageForm(FlatpageForm):
+    content = forms.CharField(widget=CKEditorWidget())
     description = forms.CharField(required=False, widget=forms.Textarea, label=_(u'Description'))
     keywords = forms.CharField(required=False, widget=forms.Textarea, label=_(u'Keywords'))
 
@@ -29,7 +33,7 @@ class CustomFlatpageForm(FlatpageForm):
         super(CustomFlatpageForm, self).__init__(*args, **kwargs)
 
 
-class CustomFlatPageAdmin(FlatPageAdmin): 
+class CustomFlatPageAdmin(FlatPageAdmin):
     form = CustomFlatpageForm
     fieldsets = (
         (None, {'fields': ('url', 'title', 'content', 'sites', 'keywords', 'description')}),
@@ -48,3 +52,6 @@ class CustomFlatPageAdmin(FlatPageAdmin):
             cmsflatpage.description = form.cleaned_data["description"]
             cmsflatpage.keywords = form.cleaned_data["keywords"]
         cmsflatpage.save()
+
+admin.site.unregister(FlatPage)
+admin.site.register(CMSFlatPage, CustomFlatPageAdmin)
