@@ -36,7 +36,7 @@ class CustomFlatpageForm(FlatpageForm):
 class CustomFlatPageAdmin(FlatPageAdmin):
     form = CustomFlatpageForm
     fieldsets = (
-        (None, {'fields': ('url', 'title', 'content', 'sites', 'keywords', 'description')}),
+        (None, {'fields': ('url', 'title', 'content', 'image', 'sites', 'keywords', 'description')}),
         (_('Advanced options'), {'classes': ('collapse',), 'fields': ('enable_comments', 'registration_required', 'template_name')}),
     )
 
